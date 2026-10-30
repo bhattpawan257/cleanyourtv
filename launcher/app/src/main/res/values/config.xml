@@ -157,7 +157,7 @@
          key line there at any verbosity, and a `getevent` MSC_SCAN is a different number, so the reliable route is
          a temporary `Log.d` in the helper's `onKeyEvent`: `getKeyCode()`, `getScanCode()`, `getDeviceId()`, read
          after a HOME_KEY_SERVICE=1 rebuild. Leave empty to omit. -->
-    <<integer-array name="settings_key_keycodes">
+    <integer-array name="settings_key_keycodes">
     <item>83</item>
     </integer-array>
     <!-- What those Settings buttons open: false, the TV's Settings; true, a small glass panel at the top right
