@@ -770,7 +770,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         btnInputs = findViewById(R.id.btnInputs);
         View btnSettings = findViewById(R.id.btnSettings);
         btnInputs.setOnClickListener(v -> showInputs());
-        btnWifi.setOnClickListener(v -> openNetworkPill());
+        btnWifi.setOnClickListener(v -> showWifiPopup());
         btnVpn.setOnClickListener(v -> openVpnPill());
         btnWifi.setOnLongClickListener(v -> {
             open(systemIntent(Settings.ACTION_WIFI_SETTINGS));
@@ -793,7 +793,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         showInputsPill = cfg.showInputsPill;
         showInputsMenuRow = cfg.showInputsPill;
         btnLibraryTop = findViewById(R.id.btnLibraryTop);
-        btnLibraryTop.setOnClickListener(v -> {
+        btnLibraryTop.setOnClickListener(v ->
             onLibraryRequested();
             libraryFromTopBar = true;   // closing it goes back to this button, not to the pill after the last row
         });
@@ -2983,6 +2983,18 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
      * The network pill opens the VPN app when one is configured and installed, otherwise Wi-Fi settings. With
      * vpn_pill the VPN app has its own pill, so this one always opens Wi-Fi settings.
      */
+    private void showWifiPopup() {
+        View anchor = btnWifi;
+        View panel = getLayoutInflater().inflate(R.layout.popup_inputs, root, false);
+        LinearLayout rows = panel.findViewById(R.id.rows);
+        int width = Math.max(anchor.getWidth(), (int) (230 * density));
+        final PopupWindow popup = glassPopup(panel, width);
+        CharSequence status = btnWifi.getText();
+        addInputRow(rows, popup, R.drawable.ic_wifi, status == null ? "" : status.toString(), -1, () -> { });
+        addInputRow(rows, popup, R.drawable.ic_settings, "Wi-Fi settings", -1,
+                () -> open(systemIntent(Settings.ACTION_WIFI_SETTINGS)));
+        dropIn(popup, panel, anchor, android.view.Gravity.START);
+    }
     private void openNetworkPill() {
         Intent i = vpnPill ? null : vpnAppIntent();
         open(i != null ? i : systemIntent(Settings.ACTION_WIFI_SETTINGS));
