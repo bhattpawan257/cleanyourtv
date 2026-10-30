@@ -793,7 +793,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         showInputsPill = cfg.showInputsPill;
         showInputsMenuRow = cfg.showInputsPill;
         btnLibraryTop = findViewById(R.id.btnLibraryTop);
-        btnLibraryTop.setOnClickListener(v ->
+        btnLibraryTop.setOnClickListener(v ->{
             onLibraryRequested();
             libraryFromTopBar = true;   // closing it goes back to this button, not to the pill after the last row
         });
