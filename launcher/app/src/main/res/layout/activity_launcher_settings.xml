@@ -112,10 +112,297 @@
             android:textSize="14sp" />
 
         <TextView
+            android:id="@+id/wifiStatusChoice"
+            style="@style/SettingsRow"
+            android:layout_marginTop="28dp" />
+
+        <TextView
+            android:id="@+id/dockGlassChoice"
+            style="@style/SettingsRow"
+            android:layout_marginTop="10dp" />
+
+        <TextView
+            android:id="@+id/namesChoice"
+            style="@style/SettingsRow"
+            android:layout_marginTop="10dp" />
+
+        <TextView
+            android:id="@+id/overshootChoice"
+            style="@style/SettingsRow"
+            android:layout_marginTop="10dp" />
+
+        <TextView
             android:id="@+id/openOnStartChoice"
             style="@style/SettingsRow"
             android:layout_marginTop="28dp"
             android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/moreOptionsChoice"
+            style="@style/SettingsRow"
+            android:layout_marginTop="28dp"
+            android:text="@string/more_options" />
+
+        <LinearLayout
+            android:id="@+id/moreOptionsContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <!-- Group 1: Dock & layout -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="@string/section_dock_layout"
+                android:textColor="#FFFFFFFF"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/dockRowChoice"
+                style="@style/SettingsRow"
+                android:layout_marginTop="10dp" />
+
+            <TextView
+                android:id="@+id/dockBandChoice"
+                style="@style/SettingsRow"
+                android:layout_marginTop="10dp" />
+
+            <TextView
+                android:id="@+id/dockTitleChoice"
+                style="@style/SettingsRow"
+                android:layout_marginTop="10dp" />
+
+            <TextView
+                android:id="@+id/dockEvenPaddingChoice"
+                style="@style/SettingsRow"
+                android:layout_marginTop="10dp" />
+
+            <TextView
+                android:id="@+id/fillDockChoice"
+                style="@style/SettingsRow"
+                android:layout_marginTop="10dp" />
+
+            <TextView
+                android:id="@+id/singleRowChoice"
+                style="@style/SettingsRow"
+                android:layout_marginTop="10dp" />
+
+            <TextView
+                android:id="@+id/dockBandAllChoice"
+                style="@style/SettingsRow"
+                android:layout_marginTop="10dp" />
+
+            <!-- Group 2: Look & motion -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="@string/section_look_motion"
+                android:textColor="#FFFFFFFF"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/cinematicHomeChoice"
+                style="@style/SettingsRow"
+                android:layout_marginTop="10dp" />
+
+            <TextView
+                android:id="@+id/cinematicDotsChoice"
+                style="@style/SettingsRow"
+                android:layout_marginTop="10dp" />
+
+            <TextView
+                android:id="@+id/cinematicWhiteFocusChoice"
+                style="@style/SettingsRow"
+                android:layout_marginTop="10dp" />
+
+            <TextView
+                android:id="@+id/ambientGlowChoice"
+                style="@style/SettingsRow"
+                android:layout_marginTop="10dp" />
+
+            <TextView
+                android:id="@+id/appGlowChoice"
+                style="@style/SettingsRow"
+                android:layout_marginTop="10dp" />
+
+            <TextView
+                android:id="@+id/fadeRowsChoice"
+                style="@style/SettingsRow"
+                android:layout_marginTop="10dp" />
+
+            <TextView
+                android:id="@+id/uniformTilesChoice"
+                style="@style/SettingsRow"
+                android:layout_marginTop="10dp" />
+
+            <TextView
+                android:id="@+id/wallpaperTrueColorChoice"
+                style="@style/SettingsRow"
+                android:layout_marginTop="10dp" />
+
+            <TextView
+                android:id="@+id/wallpaperCaptionsChoice"
+                style="@style/SettingsRow"
+                android:layout_marginTop="10dp" />
+
+            <TextView
+                android:id="@+id/reducedMotionChoice"
+                style="@style/SettingsRow"
+                android:layout_marginTop="10dp" />
+
+            <!-- Group 3: Top bar -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="@string/section_top_bar"
+                android:textColor="#FFFFFFFF"
+                android:textSize="20sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="@string/top_bar_hint"
+                android:textColor="#FFACB8C1"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/topMenuChoice"
+                style="@style/SettingsRow"
+                android:layout_marginTop="10dp" />
+
+            <TextView
+                android:id="@+id/launcherSettingsButtonChoice"
+                style="@style/SettingsRow"
+                android:layout_marginTop="10dp" />
+
+            <TextView
+                android:id="@+id/reorderButtonChoice"
+                style="@style/SettingsRow"
+                android:layout_marginTop="10dp" />
+
+            <TextView
+                android:id="@+id/showNetworkPillChoice"
+                style="@style/SettingsRow"
+                android:layout_marginTop="10dp" />
+
+            <TextView
+                android:id="@+id/showInputsPillChoice"
+                style="@style/SettingsRow"
+                android:layout_marginTop="10dp" />
+
+            <TextView
+                android:id="@+id/iconOnlyButtonsChoice"
+                style="@style/SettingsRow"
+                android:layout_marginTop="10dp" />
+
+            <TextView
+                android:id="@+id/iconOnlyInputsChoice"
+                style="@style/SettingsRow"
+                android:layout_marginTop="10dp" />
+
+            <TextView
+                android:id="@+id/vpnPillChoice"
+                style="@style/SettingsRow"
+                android:layout_marginTop="10dp" />
+
+            <TextView
+                android:id="@+id/iconOnlyVpnChoice"
+                style="@style/SettingsRow"
+                android:layout_marginTop="10dp" />
+
+            <!-- Group 4: Clock, header & screensaver -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="@string/section_clock_header"
+                android:textColor="#FFFFFFFF"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/showGreetingChoice"
+                style="@style/SettingsRow"
+                android:layout_marginTop="10dp" />
+
+            <TextView
+                android:id="@+id/headerWhiteChoice"
+                style="@style/SettingsRow"
+                android:layout_marginTop="10dp" />
+
+            <TextView
+                android:id="@+id/dateBelowClockChoice"
+                style="@style/SettingsRow"
+                android:layout_marginTop="10dp" />
+
+            <TextView
+                android:id="@+id/shamsiDateChoice"
+                style="@style/SettingsRow"
+                android:layout_marginTop="10dp" />
+
+            <TextView
+                android:id="@+id/lunarDateChoice"
+                style="@style/SettingsRow"
+                android:layout_marginTop="10dp" />
+
+            <TextView
+                android:id="@+id/showStatsChoice"
+                style="@style/SettingsRow"
+                android:layout_marginTop="10dp" />
+
+            <TextView
+                android:id="@+id/clockWallpaperChoice"
+                style="@style/SettingsRow"
+                android:layout_marginTop="10dp" />
+
+            <TextView
+                android:id="@+id/clockGlowChoice"
+                style="@style/SettingsRow"
+                android:layout_marginTop="10dp" />
+
+            <!-- Group 5: Behaviour & inputs -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="@string/section_behaviour"
+                android:textColor="#FFFFFFFF"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/tileMenuChoice"
+                style="@style/SettingsRow"
+                android:layout_marginTop="10dp" />
+
+            <TextView
+                android:id="@+id/inputsConnectedOnlyChoice"
+                style="@style/SettingsRow"
+                android:layout_marginTop="10dp" />
+
+            <TextView
+                android:id="@+id/coocaaSourcesChoice"
+                style="@style/SettingsRow"
+                android:layout_marginTop="10dp" />
+
+            <TextView
+                android:id="@+id/moduleCardsChoice"
+                style="@style/SettingsRow"
+                android:layout_marginTop="10dp" />
+
+            <TextView
+                android:id="@+id/showHomeSettingsShortcutChoice"
+                style="@style/SettingsRow"
+                android:layout_marginTop="10dp" />
+
+            <TextView
+                android:id="@+id/openOnStartToggleChoice"
+                style="@style/SettingsRow"
+                android:layout_marginTop="10dp" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/followThemeChoice"
