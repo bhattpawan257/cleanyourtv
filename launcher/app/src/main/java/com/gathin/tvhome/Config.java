@@ -49,6 +49,20 @@ final class Config {
      */
     static final String SETTINGS_REVISION_KEY = "settings_revision";
 
+    /** Boolean keys toggled in Launcher settings; cleared on theme sync or reset. */
+    static final String[] ON_TV_TOGGLE_KEYS = {
+            "wifi_status_color", "wifi_status_warnings", "dock_glass", "always_show_names", "focus_overshoot",
+            "dock_row", "dock_band", "dock_title", "dock_even_padding", "fill_dock",
+            "single_row", "dock_band_all",
+            "cinematic_home", "cinematic_dots", "cinematic_white_focus",
+            "ambient_glow", "app_glow", "fade_rows", "uniform_tiles", "wallpaper_true_color", "wallpaper_captions", "reduced_motion",
+            "top_menu", "launcher_settings_button", "reorder_button", "show_network_pill", "show_inputs_pill",
+            "icon_only_buttons", "icon_only_inputs", "vpn_pill", "icon_only_vpn",
+            "show_greeting", "header_white", "date_below_clock", "shamsi_date", "lunar_date", "show_stats",
+            "clock_wallpaper", "clock_glow",
+            "tile_menu", "inputs_connected_only", "coocaa_sources", "module_cards", "show_home_settings_shortcut", "open_on_start_choice"
+    };
+
     /** True when Launcher settings changed something since Home was built at revision {@code seen}. */
     static boolean settingsChanged(long seen, long current) {
         return seen != current;
@@ -640,6 +654,51 @@ final class Config {
         if (chosenRows >= 0 && chosenRows <= 3) rowsBelow = chosenRows;
         animations = choices.getBoolean("animations", animations);
         advancedEffects = choices.getBoolean("advanced_effects", advancedEffects);
+        wifiStatusColor = choices.getBoolean("wifi_status_color", wifiStatusColor);
+        wifiStatusWarnings = choices.getBoolean("wifi_status_warnings", wifiStatusWarnings);
+        dockGlass = choices.getBoolean("dock_glass", dockGlass);
+        alwaysShowNames = choices.getBoolean("always_show_names", alwaysShowNames);
+        focusOvershoot = choices.getBoolean("focus_overshoot", focusOvershoot);
+        dockRow = choices.getBoolean("dock_row", dockRow);
+        dockBand = choices.getBoolean("dock_band", dockBand);
+        dockTitle = choices.getBoolean("dock_title", dockTitle);
+        dockEvenPadding = choices.getBoolean("dock_even_padding", dockEvenPadding);
+        fillDock = choices.getBoolean("fill_dock", fillDock);
+        singleRow = choices.getBoolean("single_row", singleRow);
+        dockBandAll = choices.getBoolean("dock_band_all", dockBandAll);
+        cinematic = choices.getBoolean("cinematic_home", cinematic);
+        cinematicDots = choices.getBoolean("cinematic_dots", cinematicDots);
+        cinematicWhiteFocus = choices.getBoolean("cinematic_white_focus", cinematicWhiteFocus);
+        ambientGlow = choices.getBoolean("ambient_glow", ambientGlow);
+        appGlow = choices.getBoolean("app_glow", appGlow);
+        fadeRows = choices.getBoolean("fade_rows", fadeRows);
+        uniformTiles = choices.getBoolean("uniform_tiles", uniformTiles);
+        wallpaperTrueColor = choices.getBoolean("wallpaper_true_color", wallpaperTrueColor);
+        wallpaperCaptions = choices.getBoolean("wallpaper_captions", wallpaperCaptions);
+        reducedMotion = choices.getBoolean("reduced_motion", reducedMotion);
+        topMenu = choices.getBoolean("top_menu", topMenu);
+        launcherSettingsButton = choices.getBoolean("launcher_settings_button", launcherSettingsButton);
+        reorderButton = choices.getBoolean("reorder_button", reorderButton);
+        showNetworkPill = choices.getBoolean("show_network_pill", showNetworkPill);
+        showInputsPill = choices.getBoolean("show_inputs_pill", showInputsPill);
+        iconOnlyButtons = choices.getBoolean("icon_only_buttons", iconOnlyButtons);
+        iconOnlyInputs = choices.getBoolean("icon_only_inputs", iconOnlyInputs);
+        vpnPill = choices.getBoolean("vpn_pill", vpnPill);
+        iconOnlyVpn = choices.getBoolean("icon_only_vpn", iconOnlyVpn);
+        showGreeting = choices.getBoolean("show_greeting", showGreeting);
+        headerWhite = choices.getBoolean("header_white", headerWhite);
+        dateBelowClock = choices.getBoolean("date_below_clock", dateBelowClock);
+        shamsi = choices.getBoolean("shamsi_date", shamsi);
+        lunar = choices.getBoolean("lunar_date", lunar);
+        showStats = choices.getBoolean("show_stats", showStats);
+        clockWallpaper = choices.getBoolean("clock_wallpaper", clockWallpaper);
+        clockGlow = choices.getBoolean("clock_glow", clockGlow);
+        tileMenu = choices.getBoolean("tile_menu", tileMenu);
+        inputsConnectedOnly = choices.getBoolean("inputs_connected_only", inputsConnectedOnly);
+        coocaaSources = choices.getBoolean("coocaa_sources", coocaaSources);
+        moduleCards = choices.getBoolean("module_cards", moduleCards);
+        homeSettings = choices.getBoolean("show_home_settings_shortcut", homeSettings);
+        openOnStartChoice = choices.getBoolean("open_on_start_choice", openOnStartChoice);
         File wallpaper = dir != null ? new File(dir, WALLPAPER_NAME) : null;
         if (wallpaper != null && !(wallpaper.isFile() && wallpaper.length() > 0)) wallpaper = null;
         // A theme can also switch the wallpaper off while the file is still there.
@@ -669,9 +728,8 @@ final class Config {
             wallpaper = chosen.isEmpty() ? null : chosen.get(0);
             wallpaperEnabled = !chosen.isEmpty();
         }
-        // A festive skin comes only from a theme; config.xml has no festival. seasonal_skin names one the same way
-        // but launchers before it ignore the key, so a theme can carry it without older ones showing the diya skin.
-        Festival festival = json == null ? Festival.NONE : Festival.parse(festivalName(json),
+        // A festive skin comes only from a theme; config.xml has no festival.
+        Festival festival = json == null ? Festival.NONE : Festival.parse(string(json, "festival", ""),
                 string(json, "festival_until", ""), string(json, "greeting", ""), string(json, "accent_color", ""));
 
         return new Config(dock, fillDock, hidden, libraryApps, libraryExcludedApps, liveTv, liveTvAction, liveTvInputId, packageMap(launchActions), packageMap(appLabels),
@@ -730,14 +788,18 @@ final class Config {
             // Existing preferences survive an app upgrade, unless the first launch follows an
             // explicit theme push or reset by the updated tools.
             SharedPreferences.Editor editor = choices.edit();
-            if (!"absent".equals(token)) editor.remove("columns").remove("animations")
-                    .remove("advanced_effects").remove(ROWS_BELOW_DOCK_KEY).remove(WALLPAPER_CHOICE_KEY)
-                    .remove(DOCK_OPACITY_KEY);
+            if (!"absent".equals(token)) {
+                editor.remove("columns").remove("animations")
+                        .remove("advanced_effects").remove(ROWS_BELOW_DOCK_KEY).remove(WALLPAPER_CHOICE_KEY)
+                        .remove(DOCK_OPACITY_KEY);
+                for (String key : ON_TV_TOGGLE_KEYS) editor.remove(key);
+            }
             editor.putString(THEME_SIGNATURE_KEY, signature).commit();
         } else if (!seen.equals(signature)) {
-            choices.edit().remove("columns").remove("animations").remove("advanced_effects")
-                    .remove(ROWS_BELOW_DOCK_KEY).remove(WALLPAPER_CHOICE_KEY).remove(DOCK_OPACITY_KEY)
-                    .putString(THEME_SIGNATURE_KEY, signature).commit();
+            SharedPreferences.Editor editor = choices.edit().remove("columns").remove("animations").remove("advanced_effects")
+                    .remove(ROWS_BELOW_DOCK_KEY).remove(WALLPAPER_CHOICE_KEY).remove(DOCK_OPACITY_KEY);
+            for (String key : ON_TV_TOGGLE_KEYS) editor.remove(key);
+            editor.putString(THEME_SIGNATURE_KEY, signature).commit();
         }
     }
 
@@ -831,12 +893,6 @@ final class Config {
     private static String string(JSONObject o, String key, String fallback) {
         Object v = o.opt(key);
         return v instanceof String ? ((String) v).trim() : fallback;
-    }
-
-    /** The theme's festival: {@code festival}, or {@code seasonal_skin} when that is empty or missing. */
-    static String festivalName(JSONObject o) {
-        String name = string(o, "festival", "");
-        return name.isEmpty() ? string(o, "seasonal_skin", "") : name;
     }
 
     private static boolean bool(JSONObject o, String key, boolean fallback) {

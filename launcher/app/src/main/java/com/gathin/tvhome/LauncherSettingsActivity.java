@@ -32,16 +32,147 @@ public final class LauncherSettingsActivity extends Activity {
     private final TextView[] rowChoices = new TextView[4];
     private static final int[] DOCK_OPACITIES = {100, 70, 50, 30};
     private final TextView[] dockChoices = new TextView[DOCK_OPACITIES.length];
+    private View reorderChoice;
     private TextView wallpaperChoice;
     private TextView animationsChoice;
     private TextView advancedChoice;
     private TextView followThemeChoice;
     private TextView openOnStartChoice;
+    private TextView moreOptionsChoice;
+    private LinearLayout moreOptionsContainer;
     private int columns;
     private int rowsBelowDock;
     private int dockOpacity;
     private boolean animations;
     private boolean advancedEffects;
+    /** On-TV switches: the saved key(s) each one writes, its row id and its label. */
+    private static final String[][] TOGGLE_KEYS = {
+            {"wifi_status_color", "wifi_status_warnings"},
+            {"dock_glass"},
+            {"always_show_names"},
+            {"focus_overshoot"},
+            {"dock_row"},
+            {"dock_band"},
+            {"dock_title"},
+            {"dock_even_padding"},
+            {"fill_dock"},
+            {"single_row"},
+            {"dock_band_all"},
+            {"cinematic_home"},
+            {"cinematic_dots"},
+            {"cinematic_white_focus"},
+            {"ambient_glow"},
+            {"app_glow"},
+            {"fade_rows"},
+            {"uniform_tiles"},
+            {"wallpaper_true_color"},
+            {"wallpaper_captions"},
+            {"reduced_motion"},
+            {"top_menu"},
+            {"launcher_settings_button"},
+            {"reorder_button"},
+            {"show_network_pill"},
+            {"show_inputs_pill"},
+            {"icon_only_buttons"},
+            {"icon_only_inputs"},
+            {"vpn_pill"},
+            {"icon_only_vpn"},
+            {"show_greeting"},
+            {"header_white"},
+            {"date_below_clock"},
+            {"shamsi_date"},
+            {"lunar_date"},
+            {"show_stats"},
+            {"clock_wallpaper"},
+            {"clock_glow"},
+            {"tile_menu"},
+            {"inputs_connected_only"},
+            {"coocaa_sources"},
+            {"module_cards"},
+            {"show_home_settings_shortcut"},
+            {"open_on_start_choice"}
+    };
+    private static final int[] TOGGLE_IDS = {
+            R.id.wifiStatusChoice, R.id.dockGlassChoice, R.id.namesChoice, R.id.overshootChoice,
+            R.id.dockRowChoice, R.id.dockBandChoice, R.id.dockTitleChoice, R.id.dockEvenPaddingChoice,
+            R.id.fillDockChoice, R.id.singleRowChoice, R.id.dockBandAllChoice,
+            R.id.cinematicHomeChoice, R.id.cinematicDotsChoice, R.id.cinematicWhiteFocusChoice,
+            R.id.ambientGlowChoice, R.id.appGlowChoice, R.id.fadeRowsChoice, R.id.uniformTilesChoice,
+            R.id.wallpaperTrueColorChoice, R.id.wallpaperCaptionsChoice, R.id.reducedMotionChoice,
+            R.id.topMenuChoice, R.id.launcherSettingsButtonChoice, R.id.reorderButtonChoice,
+            R.id.showNetworkPillChoice, R.id.showInputsPillChoice, R.id.iconOnlyButtonsChoice,
+            R.id.iconOnlyInputsChoice, R.id.vpnPillChoice, R.id.iconOnlyVpnChoice,
+            R.id.showGreetingChoice, R.id.headerWhiteChoice, R.id.dateBelowClockChoice,
+            R.id.shamsiDateChoice, R.id.lunarDateChoice, R.id.showStatsChoice,
+            R.id.clockWallpaperChoice, R.id.clockGlowChoice,
+            R.id.tileMenuChoice, R.id.inputsConnectedOnlyChoice, R.id.coocaaSourcesChoice,
+            R.id.moduleCardsChoice, R.id.showHomeSettingsShortcutChoice, R.id.openOnStartToggleChoice
+    };
+    private static final int[] TOGGLE_LABELS = {
+            R.string.wifi_status_label, R.string.dock_glass_label, R.string.names_label, R.string.overshoot_label,
+            R.string.dock_row_label, R.string.dock_band_label, R.string.dock_title_label, R.string.dock_even_padding_label,
+            R.string.fill_dock_label, R.string.single_row_label, R.string.dock_band_all_label,
+            R.string.cinematic_home_label, R.string.cinematic_dots_label, R.string.cinematic_white_focus_label,
+            R.string.ambient_glow_label, R.string.app_glow_label, R.string.fade_rows_label, R.string.uniform_tiles_label,
+            R.string.wallpaper_true_color_label, R.string.wallpaper_captions_label, R.string.reduced_motion_label,
+            R.string.top_menu_label, R.string.launcher_settings_button_label, R.string.reorder_button_label,
+            R.string.show_network_pill_label, R.string.show_inputs_pill_label, R.string.icon_only_buttons_label,
+            R.string.icon_only_inputs_label, R.string.vpn_pill_label, R.string.icon_only_vpn_label,
+            R.string.show_greeting_label, R.string.header_white_label, R.string.date_below_clock_label,
+            R.string.shamsi_date_label, R.string.lunar_date_label, R.string.show_stats_label,
+            R.string.clock_wallpaper_label, R.string.clock_glow_label,
+            R.string.tile_menu_label, R.string.inputs_connected_only_label, R.string.coocaa_sources_label,
+            R.string.module_cards_label, R.string.show_home_settings_shortcut_label, R.string.open_on_start_toggle_label
+    };
+    private final TextView[] toggleChoices = new TextView[TOGGLE_IDS.length];
+    private final boolean[] toggleOn = new boolean[TOGGLE_IDS.length];
+
+    private void loadToggles(Config c) {
+        toggleOn[0] = c.wifiStatusColor;
+        toggleOn[1] = c.dockGlass;
+        toggleOn[2] = c.alwaysShowNames;
+        toggleOn[3] = c.focusOvershoot;
+        toggleOn[4] = c.dockRow;
+        toggleOn[5] = c.dockBand;
+        toggleOn[6] = c.dockTitle;
+        toggleOn[7] = c.dockEvenPadding;
+        toggleOn[8] = c.fillDock;
+        toggleOn[9] = choices.getBoolean("single_row", c.singleRow);
+        toggleOn[10] = c.dockBandAll;
+        toggleOn[11] = c.cinematicHome;
+        toggleOn[12] = c.cinematicDots;
+        toggleOn[13] = c.cinematicWhiteFocus;
+        toggleOn[14] = c.ambientGlow;
+        toggleOn[15] = c.appGlow;
+        toggleOn[16] = c.fadeRows;
+        toggleOn[17] = c.uniformTiles;
+        toggleOn[18] = c.wallpaperTrueColor;
+        toggleOn[19] = c.wallpaperCaptions;
+        toggleOn[20] = c.reducedMotion;
+        toggleOn[21] = c.topMenu;
+        toggleOn[22] = c.launcherSettingsButton;
+        toggleOn[23] = c.reorderButton;
+        toggleOn[24] = c.showNetworkPill;
+        toggleOn[25] = c.showInputsPill;
+        toggleOn[26] = c.iconOnlyButtons;
+        toggleOn[27] = c.iconOnlyInputs;
+        toggleOn[28] = c.vpnPill;
+        toggleOn[29] = c.iconOnlyVpn;
+        toggleOn[30] = c.showGreeting;
+        toggleOn[31] = c.headerWhite;
+        toggleOn[32] = c.dateBelowClock;
+        toggleOn[33] = c.shamsiDate;
+        toggleOn[34] = c.lunarDate;
+        toggleOn[35] = c.showStats;
+        toggleOn[36] = c.clockWallpaper;
+        toggleOn[37] = c.clockGlow;
+        toggleOn[38] = c.tileMenu;
+        toggleOn[39] = c.inputsConnectedOnly;
+        toggleOn[40] = c.coocaaSources;
+        toggleOn[41] = c.moduleCards;
+        toggleOn[42] = c.showHomeSettingsShortcut;
+        toggleOn[43] = c.openOnStartChoice;
+    }
 
     @Override
     protected void onCreate(Bundle state) {
@@ -49,7 +180,7 @@ public final class LauncherSettingsActivity extends Activity {
         setContentView(R.layout.activity_launcher_settings);
         choices = getSharedPreferences(Config.SETTINGS_NAME, MODE_PRIVATE);
         Config config = Config.load(this);
-        View reorderChoice = findViewById(R.id.reorderChoice);
+        reorderChoice = findViewById(R.id.reorderChoice);
         reorderChoice.setVisibility(config.launcherSettingsButton ? View.VISIBLE : View.GONE);
         reorderChoice.setOnClickListener(v -> {
             setResult(RESULT_OK, new Intent().putExtra(EXTRA_REORDER, true));
@@ -60,6 +191,7 @@ public final class LauncherSettingsActivity extends Activity {
         dockOpacity = config.dockOpacity;
         animations = config.animations;
         advancedEffects = config.animations && config.advancedEffects;
+        loadToggles(config);
 
         int[] ids = {R.id.columns4, R.id.columns5, R.id.columns6, R.id.columns7};
         for (int i = 0; i < ids.length; i++) {
@@ -130,18 +262,45 @@ public final class LauncherSettingsActivity extends Activity {
                         .show();
             }
         });
-        openOnStartChoice = findViewById(R.id.openOnStartChoice);
-        if (config.openOnStartChoice) {
-            openOnStartChoice.setVisibility(View.VISIBLE);
-            openOnStartChoice.setOnClickListener(v -> showOpenOnStartPicker());
+        for (int i = 0; i < TOGGLE_IDS.length; i++) {
+            final int index = i;
+            toggleChoices[i] = findViewById(TOGGLE_IDS[i]);
+            toggleChoices[i].setOnClickListener(v -> {
+                toggleOn[index] = !toggleOn[index];
+                SharedPreferences.Editor editor = choices.edit();
+                for (String key : TOGGLE_KEYS[index]) editor.putBoolean(key, toggleOn[index]);
+                editor.apply();
+                changed();
+                refresh();
+            });
         }
+        openOnStartChoice = findViewById(R.id.openOnStartChoice);
+        openOnStartChoice.setOnClickListener(v -> showOpenOnStartPicker());
+
+        moreOptionsContainer = findViewById(R.id.moreOptionsContainer);
+        moreOptionsChoice = findViewById(R.id.moreOptionsChoice);
+        moreOptionsChoice.setOnClickListener(v -> {
+            boolean open = moreOptionsContainer.getVisibility() != View.VISIBLE;
+            moreOptionsContainer.setVisibility(open ? View.VISIBLE : View.GONE);
+            refresh();
+            if (open) {
+                toggleChoices[4].requestFocus();
+            } else {
+                moreOptionsChoice.requestFocus();
+            }
+        });
+
         followThemeChoice = findViewById(R.id.followThemeChoice);
         followThemeChoice.setOnClickListener(v -> {
             if (!hasOnTvChoices()) return;
             choices.edit().remove("columns").remove(Config.ROWS_BELOW_DOCK_KEY).remove("animations")
                     .remove("advanced_effects").remove(Config.WALLPAPER_CHOICE_KEY)
                     .remove(Config.DOCK_OPACITY_KEY).remove(OpenOnStart.KEY).commit();
+            SharedPreferences.Editor reset = choices.edit();
+            for (String[] keys : TOGGLE_KEYS) for (String key : keys) reset.remove(key);
+            reset.commit();
             Config current = Config.load(this);
+            loadToggles(current);
             columns = current.columns;
             rowsBelowDock = current.rowsBelowDock;
             dockOpacity = current.dockOpacity;
@@ -290,6 +449,10 @@ public final class LauncherSettingsActivity extends Activity {
                 getString(animations ? R.string.on : R.string.off)));
         advancedChoice.setText(getString(R.string.advanced_effects_state,
                 getString(advancedEffects ? R.string.on : R.string.off)));
+        for (int i = 0; i < toggleChoices.length; i++) {
+            toggleChoices[i].setText(getString(R.string.toggle_state, getString(TOGGLE_LABELS[i]),
+                    getString(toggleOn[i] ? R.string.on : R.string.off)));
+        }
         advancedChoice.setEnabled(animations);
         advancedChoice.setAlpha(animations ? 1f : 0.5f);
         String wallpaperCurrent = choices.getString(Config.WALLPAPER_CHOICE_KEY, null);
@@ -297,11 +460,17 @@ public final class LauncherSettingsActivity extends Activity {
                 "none".equals(wallpaperCurrent) ? getString(R.string.wallpaper_none)
                         : wallpaperCurrent != null ? wallpaperCurrent
                         : getString(R.string.wallpaper_theme_default)));
+        reorderChoice.setVisibility(toggleOn[22] ? View.VISIBLE : View.GONE);
+        openOnStartChoice.setVisibility(toggleOn[43] ? View.VISIBLE : View.GONE);
         openOnStartChoice.setText(getString(R.string.open_on_start_state, openOnStartLabel()));
+        boolean moreOpen = moreOptionsContainer.getVisibility() == View.VISIBLE;
+        moreOptionsChoice.setText(moreOpen ? R.string.more_options_hide : R.string.more_options);
+        moreOptionsChoice.setSelected(moreOpen);
         followThemeChoice.setSelected(!hasOnTvChoices());
     }
 
     private boolean hasOnTvChoices() {
+        for (String[] keys : TOGGLE_KEYS) for (String key : keys) if (choices.contains(key)) return true;
         return choices.contains("columns") || choices.contains(Config.ROWS_BELOW_DOCK_KEY)
                 || choices.contains("animations") || choices.contains("advanced_effects")
                 || choices.contains(Config.WALLPAPER_CHOICE_KEY) || choices.contains(Config.DOCK_OPACITY_KEY)
